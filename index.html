@@ -195,9 +195,15 @@
     .contacts__label span {
       font-size: 11px;
       font-weight: 700;
-      letter-spacing: 0.22em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--gold);
+      text-align: center;
+    }
+
+    html[lang="zh-CN"] .contacts__label span,
+    html[lang="ms"] .contacts__label span {
+      letter-spacing: 0.08em;
     }
 
     .contacts__label::before,
@@ -317,10 +323,45 @@
       white-space: nowrap;
     }
 
-    .item--wechat .item__action {
-      color: color-mix(in srgb, var(--wechat) 80%, white);
-      border-color: color-mix(in srgb, var(--wechat) 30%, transparent);
-      background: color-mix(in srgb, var(--wechat) 12%, transparent);
+    .item--wechat .item__action,
+    .item--whatsapp .item__action,
+    .item--telegram .item__action,
+    .item--channel .item__action {
+      color: color-mix(in srgb, var(--accent) 82%, white);
+      border-color: color-mix(in srgb, var(--accent) 32%, transparent);
+      background: color-mix(in srgb, var(--accent) 14%, transparent);
+    }
+
+    /* Language switcher */
+    .lang {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 4px;
+      animation: rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .lang__btn {
+      min-width: 44px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--faint);
+      font: inherit;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .lang__btn.is-active {
+      color: #1a1408;
+      background: linear-gradient(180deg, var(--gold-hi), var(--gold));
+      border-color: transparent;
+      box-shadow: 0 4px 14px rgba(226, 184, 74, 0.28);
     }
 
     .foot {
@@ -471,18 +512,26 @@
   </div>
 
   <main class="page">
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" class="lang__btn" data-lang="ms">BM</button>
+      <button type="button" class="lang__btn" data-lang="zh">中文</button>
+      <button type="button" class="lang__btn" data-lang="en">EN</button>
+    </div>
+
     <header class="brand">
       <div class="brand__mark">
         <img class="brand__logo" src="assets/logo.png" alt="SUPERGAME" width="320" height="160">
       </div>
       <div class="brand__meta">
         <span class="brand__flags" aria-hidden="true">🇲🇾 🇸🇬</span>
-        <span class="brand__region">Malaysia · Singapore</span>
+        <span class="brand__region" data-i18n="region">Malaysia · Singapore</span>
       </div>
     </header>
 
-    <section class="contacts" aria-label="客服联系方式">
-      <div class="contacts__label"><span>Contact Support</span></div>
+    <section class="contacts" aria-labelledby="contacts-title">
+      <div class="contacts__label">
+        <span id="contacts-title" data-i18n="support">Contact Support</span>
+      </div>
 
       <div class="list">
         <button class="item item--wechat" id="wechat" type="button" data-copy="supergame777">
@@ -490,10 +539,10 @@
             <svg viewBox="0 0 24 24"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.597 3.658 4.196 6.226 4.196.577 0 1.147-.074 1.694-.213a.722.722 0 0 1 .598.082l1.584.926a.272.272 0 0 0 .14.047c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.582.582 0 0 1-.023-.156.49.49 0 0 1 .201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-2.931-5.837-6.656-6.088V8.89c-.134-.01-.27-.027-.407-.032zm-2.53 3.274c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.969-.982zm4.844 0c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.969-.982z"/></svg>
           </span>
           <span class="item__copy">
-            <span class="item__name">WeChat</span>
+            <span class="item__name" data-i18n="wechat">WeChat</span>
             <span class="item__sub">supergame777</span>
           </span>
-          <span class="item__action">复制</span>
+          <span class="item__action" data-i18n="copy">Copy</span>
         </button>
 
         <a class="item item--whatsapp" href="https://wa.link/supergame77" target="_blank" rel="noopener noreferrer">
@@ -504,7 +553,7 @@
             <span class="item__name">WhatsApp</span>
             <span class="item__sub">wa.link/supergame77</span>
           </span>
-          <span class="item__action">打开</span>
+          <span class="item__action" data-i18n="open">Open</span>
         </a>
 
         <a class="item item--telegram" href="https://t.me/supergame77" target="_blank" rel="noopener noreferrer">
@@ -515,7 +564,7 @@
             <span class="item__name">Telegram</span>
             <span class="item__sub">t.me/supergame77</span>
           </span>
-          <span class="item__action">打开</span>
+          <span class="item__action" data-i18n="open">Open</span>
         </a>
 
         <a class="item item--channel" href="https://t.me/supergame7777" target="_blank" rel="noopener noreferrer">
@@ -523,10 +572,10 @@
             <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
           </span>
           <span class="item__copy">
-            <span class="item__name">Telegram Channel</span>
+            <span class="item__name" data-i18n="channel">Telegram Channel</span>
             <span class="item__sub">t.me/supergame7777</span>
           </span>
-          <span class="item__action">打开</span>
+          <span class="item__action" data-i18n="open">Open</span>
         </a>
       </div>
     </section>
@@ -534,27 +583,88 @@
     <footer class="foot">
       <div class="foot__live">
         <span class="foot__dot" aria-hidden="true"></span>
-        24/7 Online
+        <span data-i18n="online">24/7 Online</span>
       </div>
     </footer>
   </main>
 
   <div class="toast" id="toast" role="status" aria-live="polite">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-    <p>已复制微信号：<strong>supergame777</strong></p>
+    <p><span data-i18n="copied">Copied WeChat ID:</span> <strong>supergame777</strong></p>
   </div>
 
   <script>
+    const i18n = {
+      en: {
+        lang: 'en',
+        region: 'Malaysia · Singapore',
+        support: 'Contact Support',
+        wechat: 'WeChat',
+        channel: 'Telegram Channel',
+        copy: 'Copy',
+        open: 'Open',
+        online: '24/7 Online',
+        copied: 'Copied WeChat ID:'
+      },
+      zh: {
+        lang: 'zh-CN',
+        region: '马来西亚 · 新加坡',
+        support: '联系客服',
+        wechat: '微信',
+        channel: 'Telegram 频道',
+        copy: '复制',
+        open: '打开',
+        online: '全天在线',
+        copied: '已复制微信号：'
+      },
+      ms: {
+        lang: 'ms',
+        region: 'Malaysia · Singapura',
+        support: 'Hubungi Sokongan',
+        wechat: 'WeChat',
+        channel: 'Saluran Telegram',
+        copy: 'Salin',
+        open: 'Buka',
+        online: 'Dalam Talian 24/7',
+        copied: 'ID WeChat disalin:'
+      }
+    };
+
+    const html = document.documentElement;
+    const langBtns = document.querySelectorAll('.lang__btn');
+    const toast = document.getElementById('toast');
+    const wechat = document.getElementById('wechat');
+    let timer;
+    let currentLang = localStorage.getItem('sg-lang') || 'zh';
+
+    function setLang(code) {
+      const dict = i18n[code] || i18n.zh;
+      currentLang = code;
+      html.lang = dict.lang;
+      localStorage.setItem('sg-lang', code);
+
+      document.querySelectorAll('[data-i18n]').forEach((el) => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) el.textContent = dict[key];
+      });
+
+      langBtns.forEach((btn) => {
+        btn.classList.toggle('is-active', btn.dataset.lang === code);
+      });
+    }
+
+    langBtns.forEach((btn) => {
+      btn.addEventListener('click', () => setLang(btn.dataset.lang));
+    });
+
+    setLang(currentLang);
+
     /* Lock viewport drag / rubber-band bounce on mobile */
     document.addEventListener('touchmove', (e) => {
       e.preventDefault();
     }, { passive: false });
 
     document.addEventListener('gesturestart', (e) => e.preventDefault());
-
-    const wechat = document.getElementById('wechat');
-    const toast = document.getElementById('toast');
-    let timer;
 
     wechat.addEventListener('click', async () => {
       const id = wechat.dataset.copy;
