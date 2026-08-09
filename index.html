@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="description" content="SUPERGAME — 官方客服联系入口">
+  <meta name="theme-color" content="#07070b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>SUPERGAME</title>
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="apple-touch-icon" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --bg: #07070b;
+      --ink: #f7f1e4;
+      --muted: rgba(247, 241, 228, 0.55);
+      --faint: rgba(247, 241, 228, 0.32);
+      --gold: #e2b84a;
+      --gold-hi: #f6d978;
+      --red: #c91f35;
+      --wechat: #07c160;
+      --whatsapp: #25d366;
+      --telegram: #2aabee;
+      --safe-t: env(safe-area-inset-top, 0px);
+      --safe-b: env(safe-area-inset-bottom, 0px);
+      --safe-l: env(safe-area-inset-left, 0px);
+      --safe-r: env(safe-area-inset-right, 0px);
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      overscroll-behavior: none;
+      -webkit-text-size-adjust: 100%;
+      touch-action: none;
+    }
+
+    body {
+      position: fixed;
+      inset: 0;
+      font-family: 'Sora', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .scene {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    .scene__glow {
+      position: absolute;
+      left: 50%;
+      top: -8%;
+      width: 120%;
+      max-width: 560px;
+      aspect-ratio: 1;
+      transform: translateX(-50%);
+      background:
+        radial-gradient(circle at 50% 40%, rgba(201, 31, 53, 0.22) 0%, transparent 42%),
+        radial-gradient(circle at 50% 55%, rgba(226, 184, 74, 0.14) 0%, transparent 50%);
+      filter: blur(2px);
+    }
+
+    .scene__mesh {
+      position: absolute;
+      inset: 0;
+      opacity: 0.35;
+      background-image:
+        linear-gradient(rgba(226, 184, 74, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(226, 184, 74, 0.035) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 80% 55% at 50% 28%, #000 10%, transparent 75%);
+    }
+
+    .scene__vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 75% 70% at 50% 40%, transparent 35%, rgba(0, 0, 0, 0.72) 100%);
+    }
+
+    .page {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      width: 100%;
+      max-width: 420px;
+      height: 100%;
+      height: 100dvh;
+      margin: 0 auto;
+      padding:
+        calc(24px + var(--safe-t))
+        calc(22px + var(--safe-r))
+        calc(20px + var(--safe-b))
+        calc(22px + var(--safe-l));
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 22px;
+      overflow: hidden;
+      overscroll-behavior: none;
+      touch-action: none;
+    }
+
+    /* Brand block — logo is the hero */
+    .brand {
+      text-align: center;
+      animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .brand__mark {
+      position: relative;
+      display: block;
+      width: min(100%, 300px);
+      margin: 0 auto 18px;
+    }
+
+    .brand__mark::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 55%;
+      width: 70%;
+      height: 45%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(ellipse, rgba(226, 184, 74, 0.28) 0%, transparent 70%);
+      filter: blur(18px);
+      z-index: 0;
+    }
+
+    .brand__logo {
+      position: relative;
+      z-index: 1;
+      display: block;
+      width: 100%;
+      height: auto;
+      filter: drop-shadow(0 10px 28px rgba(0, 0, 0, 0.45));
+    }
+
+    .brand__meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(226, 184, 74, 0.18);
+      background: rgba(226, 184, 74, 0.06);
+    }
+
+    .brand__flags {
+      display: inline-flex;
+      gap: 5px;
+      font-size: 15px;
+      line-height: 1;
+    }
+
+    .brand__region {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* Contact block */
+    .contacts {
+      animation: rise 0.7s 0.12s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .contacts__label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .contacts__label span {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .contacts__label::before,
+    .contacts__label::after {
+      content: '';
+      width: 28px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(226, 184, 74, 0.55));
+    }
+
+    .contacts__label::after {
+      background: linear-gradient(90deg, rgba(226, 184, 74, 0.55), transparent);
+    }
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .item {
+      --accent: var(--gold);
+      position: relative;
+      display: grid;
+      grid-template-columns: 48px 1fr auto;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      min-height: 64px;
+      padding: 12px 14px 12px 12px;
+      border: none;
+      border-radius: 18px;
+      color: var(--ink);
+      text-decoration: none;
+      text-align: left;
+      font: inherit;
+      cursor: pointer;
+      background:
+        linear-gradient(#121218, #121218) padding-box,
+        linear-gradient(135deg, rgba(246, 217, 120, 0.55), rgba(201, 31, 53, 0.35), rgba(226, 184, 74, 0.2)) border-box;
+      border: 1px solid transparent;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+      touch-action: manipulation;
+      animation: rise 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .item:nth-child(1) { animation-delay: 0.18s; }
+    .item:nth-child(2) { animation-delay: 0.26s; }
+    .item:nth-child(3) { animation-delay: 0.34s; }
+    .item:nth-child(4) { animation-delay: 0.42s; }
+
+    .item:active {
+      transform: scale(0.985);
+    }
+
+    @media (hover: hover) {
+      .item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.38), 0 0 0 1px rgba(226, 184, 74, 0.12);
+        filter: brightness(1.06);
+      }
+    }
+
+    .item--wechat   { --accent: var(--wechat); }
+    .item--whatsapp { --accent: var(--whatsapp); }
+    .item--telegram { --accent: var(--telegram); }
+    .item--channel  { --accent: var(--gold-hi); }
+
+    .item__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: color-mix(in srgb, var(--accent) 16%, #0a0a10);
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 28%, transparent);
+    }
+
+    .item__icon svg {
+      width: 24px;
+      height: 24px;
+      fill: var(--accent);
+    }
+
+    .item__copy {
+      min-width: 0;
+    }
+
+    .item__name {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      line-height: 1.2;
+    }
+
+    .item__sub {
+      margin-top: 3px;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .item__action {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--faint);
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      white-space: nowrap;
+    }
+
+    .item--wechat .item__action {
+      color: color-mix(in srgb, var(--wechat) 80%, white);
+      border-color: color-mix(in srgb, var(--wechat) 30%, transparent);
+      background: color-mix(in srgb, var(--wechat) 12%, transparent);
+    }
+
+    .foot {
+      text-align: center;
+      animation: rise 0.7s 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .foot__live {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--faint);
+    }
+
+    .foot__dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--wechat);
+      box-shadow: 0 0 0 0 rgba(7, 193, 96, 0.45);
+      animation: pulse 2s ease-out infinite;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(22px + var(--safe-b));
+      z-index: 50;
+      transform: translateX(-50%) translateY(16px);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      max-width: calc(100vw - 40px);
+      padding: 13px 18px;
+      border-radius: 14px;
+      background: rgba(14, 14, 20, 0.94);
+      border: 1px solid rgba(7, 193, 96, 0.35);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.28s ease, transform 0.28s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--wechat);
+      flex-shrink: 0;
+    }
+
+    .toast p {
+      font-size: 13.5px;
+      font-weight: 600;
+    }
+
+    .toast strong {
+      color: var(--wechat);
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(7, 193, 96, 0.45); }
+      70% { box-shadow: 0 0 0 8px rgba(7, 193, 96, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(7, 193, 96, 0); }
+    }
+
+    @media (max-width: 360px) {
+      .page {
+        gap: 22px;
+        padding-left: calc(16px + var(--safe-l));
+        padding-right: calc(16px + var(--safe-r));
+      }
+
+      .brand__mark { width: min(100%, 260px); }
+
+      .item {
+        grid-template-columns: 44px 1fr auto;
+        gap: 11px;
+        min-height: 58px;
+        padding: 10px 10px 10px 10px;
+        border-radius: 16px;
+      }
+
+      .item__icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+      }
+
+      .item__icon svg {
+        width: 22px;
+        height: 22px;
+      }
+
+      .item__name { font-size: 14px; }
+      .item__action { font-size: 10px; padding: 6px 8px; }
+    }
+
+    @media (min-width: 480px) {
+      .brand__mark { width: 320px; }
+      .item { min-height: 68px; padding: 14px 16px 14px 14px; }
+      .item__name { font-size: 16px; }
+      .item__sub { font-size: 13px; }
+    }
+
+    @media (max-height: 640px) {
+      .page {
+        justify-content: flex-start;
+        gap: 20px;
+        padding-top: calc(20px + var(--safe-t));
+      }
+      .brand__mark { width: min(100%, 240px); margin-bottom: 12px; }
+    }
+
+    @media (max-height: 500px) and (orientation: landscape) {
+      .page {
+        width: min(100%, 640px);
+        flex-direction: row;
+        align-items: center;
+        gap: 28px;
+        padding-top: calc(16px + var(--safe-t));
+        padding-bottom: calc(16px + var(--safe-b));
+      }
+      .brand { flex: 0 0 42%; }
+      .brand__mark { width: 100%; margin-bottom: 12px; }
+      .contacts { flex: 1; }
+      .foot { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="scene" aria-hidden="true">
+    <div class="scene__glow"></div>
+    <div class="scene__mesh"></div>
+    <div class="scene__vignette"></div>
+  </div>
+
+  <main class="page">
+    <header class="brand">
+      <div class="brand__mark">
+        <img class="brand__logo" src="assets/logo.png" alt="SUPERGAME" width="320" height="160">
+      </div>
+      <div class="brand__meta">
+        <span class="brand__flags" aria-hidden="true">🇲🇾 🇸🇬</span>
+        <span class="brand__region">Malaysia · Singapore</span>
+      </div>
+    </header>
+
+    <section class="contacts" aria-label="客服联系方式">
+      <div class="contacts__label"><span>Contact Support</span></div>
+
+      <div class="list">
+        <button class="item item--wechat" id="wechat" type="button" data-copy="supergame777">
+          <span class="item__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.597 3.658 4.196 6.226 4.196.577 0 1.147-.074 1.694-.213a.722.722 0 0 1 .598.082l1.584.926a.272.272 0 0 0 .14.047c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.582.582 0 0 1-.023-.156.49.49 0 0 1 .201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-2.931-5.837-6.656-6.088V8.89c-.134-.01-.27-.027-.407-.032zm-2.53 3.274c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.969-.982zm4.844 0c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.969-.982z"/></svg>
+          </span>
+          <span class="item__copy">
+            <span class="item__name">WeChat</span>
+            <span class="item__sub">supergame777</span>
+          </span>
+          <span class="item__action">复制</span>
+        </button>
+
+        <a class="item item--whatsapp" href="https://wa.link/supergame77" target="_blank" rel="noopener noreferrer">
+          <span class="item__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+          </span>
+          <span class="item__copy">
+            <span class="item__name">WhatsApp</span>
+            <span class="item__sub">wa.link/supergame77</span>
+          </span>
+          <span class="item__action">打开</span>
+        </a>
+
+        <a class="item item--telegram" href="https://t.me/supergame77" target="_blank" rel="noopener noreferrer">
+          <span class="item__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+          </span>
+          <span class="item__copy">
+            <span class="item__name">Telegram</span>
+            <span class="item__sub">t.me/supergame77</span>
+          </span>
+          <span class="item__action">打开</span>
+        </a>
+
+        <a class="item item--channel" href="https://t.me/supergame7777" target="_blank" rel="noopener noreferrer">
+          <span class="item__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+          </span>
+          <span class="item__copy">
+            <span class="item__name">Telegram Channel</span>
+            <span class="item__sub">t.me/supergame7777</span>
+          </span>
+          <span class="item__action">打开</span>
+        </a>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <div class="foot__live">
+        <span class="foot__dot" aria-hidden="true"></span>
+        24/7 Online
+      </div>
+    </footer>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+    <p>已复制微信号：<strong>supergame777</strong></p>
+  </div>
+
+  <script>
+    /* Lock viewport drag / rubber-band bounce on mobile */
+    document.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+    }, { passive: false });
+
+    document.addEventListener('gesturestart', (e) => e.preventDefault());
+
+    const wechat = document.getElementById('wechat');
+    const toast = document.getElementById('toast');
+    let timer;
+
+    wechat.addEventListener('click', async () => {
+      const id = wechat.dataset.copy;
+      try {
+        await navigator.clipboard.writeText(id);
+      } catch {
+        const el = document.createElement('textarea');
+        el.value = id;
+        el.style.cssText = 'position:fixed;opacity:0';
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+      }
+      clearTimeout(timer);
+      toast.classList.add('show');
+      timer = setTimeout(() => toast.classList.remove('show'), 2400);
+    });
+  </script>
+</body>
+</html>
